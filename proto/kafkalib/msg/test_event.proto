@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package kafkalib.msg;
+
+import "kafkalib/opts/opts.proto";
+
+message TestEvent {
+  option (kafkalib.opts.topic_name) = "user-event";
+
+  string message = 1;
+}

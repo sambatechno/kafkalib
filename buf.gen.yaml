@@ -1,0 +1,16 @@
+version: v2
+clean: true
+managed:
+  enabled: true
+  override:
+    # Use this prefix by default for all files
+    - file_option: go_package_prefix
+      value: github.com/sambatechno/kafkalib/gen
+  disable:
+    - file_option: go_package
+      module: buf.build/bufbuild/protovalidate
+
+plugins:
+  - remote: buf.build/protocolbuffers/go:v1.36.6 # Use latest stable version
+    out: gen
+    opt: paths=source_relative
