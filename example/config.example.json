@@ -1,0 +1,9 @@
+{
+  "kafka_brokers": [
+    "example.confluent.cloud:9092"
+  ],
+  "publisher_client_id": "example-client-id",
+  "consumer_client_id": "example-client-id",
+  "sasl_username": "example-username",
+  "sasl_password": "example-password"
+}
