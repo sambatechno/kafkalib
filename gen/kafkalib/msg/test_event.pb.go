@@ -73,7 +73,7 @@ const file_kafkalib_msg_test_event_proto_rawDesc = "" +
 	"\x1dkafkalib/msg/test_event.proto\x12\fkafkalib.msg\x1a\x18kafkalib/opts/opts.proto\"5\n" +
 	"\tTestEvent\x12\x18\n" +
 	"\amessage\x18\x01 \x01(\tR\amessage:\x0e\x82\xa6\x1d\n" +
-	"user-eventB\xa5\x01\n" +
+	"test-eventB\xa5\x01\n" +
 	"\x10com.kafkalib.msgB\x0eTestEventProtoP\x01Z0github.com/sambatechno/kafkalib/gen/kafkalib/msg\xa2\x02\x03KMX\xaa\x02\fKafkalib.Msg\xca\x02\fKafkalib\\Msg\xe2\x02\x18Kafkalib\\Msg\\GPBMetadata\xea\x02\rKafkalib::Msgb\x06proto3"
 
 var (

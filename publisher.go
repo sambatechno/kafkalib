@@ -20,6 +20,11 @@ func NewPublisher(brokers []string, dialer *kafka.Dialer) *Publisher {
 		}),
 	}
 }
+
+func (p *Publisher) Close() error {
+	return p.wr.Close()
+}
+
 func (p *Publisher) Publish(ctx context.Context, messages []proto.Message) error {
 	kfkMsgs := []kafka.Message{}
 

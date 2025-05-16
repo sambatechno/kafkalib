@@ -3,15 +3,14 @@ package main
 import (
 	"context"
 	"crypto/tls"
-	"fmt"
 	"log"
 	"time"
 
+	"github.com/sambatechno/kafkalib"
 	"github.com/sambatechno/kafkalib/example"
 	"github.com/sambatechno/kafkalib/gen/kafkalib/msg"
 	"github.com/segmentio/kafka-go"
 	"github.com/segmentio/kafka-go/sasl/plain"
-	"google.golang.org/protobuf/proto"
 )
 
 func main() {
@@ -33,36 +32,32 @@ func main() {
 		},
 	}
 
-	r := kafka.NewReader(kafka.ReaderConfig{
-		Brokers: cfg.KafkaBrokers,
-		Dialer:  dialer,
-		Topic:   "user-event",
-		GroupID: "consumer-a",
-	})
-
-	log.Println("start listening")
+	consumer, err := kafkalib.NewConsumer(
+		cfg.KafkaBrokers,
+		"example-consumer",
+		dialer,
+		func() *msg.UserEvent {
+			return new(msg.UserEvent)
+		},
+	)
+	if err != nil {
+		log.Fatalln("failed to create consumer", err)
+	}
 
 	for {
-		m, err := r.ReadMessage(context.Background())
+		m, err := consumer.ReadMessage(context.Background())
 		if err != nil {
-			fmt.Println("err reading", err)
+			log.Println("err reading", err)
 			break
 		}
-		fmt.Printf("message at topic/partition/offset %v/%v/%v: %s\n", m.Topic, m.Partition, m.Offset, string(m.Key))
-
-		fmt.Printf("%#v\n", string(m.Value))
-		ev := &msg.UserEvent{}
-		if err := proto.Unmarshal(m.Value, ev); err != nil {
-			log.Println("failed to unmarshal ", err)
-		}
-		switch body := ev.Body.(type) {
+		switch body := m.Body.(type) {
 		case *msg.UserEvent_RegistrationSuccess_:
-			fmt.Println("registration success", body, ev.CreateTimestamp)
+			log.Println("registration success", body, m.CreateTimestamp)
 		default:
 		}
 	}
 
-	if err := r.Close(); err != nil {
+	if err := consumer.Close(); err != nil {
 		log.Fatal("failed to close reader:", err)
 	}
 }
