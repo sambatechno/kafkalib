@@ -5,7 +5,7 @@ package kafkalib.msg;
 import "kafkalib/opts/opts.proto";
 
 message TestEvent {
-  option (kafkalib.opts.topic_name) = "user-event";
+  option (kafkalib.opts.topic_name) = "test-event";
 
   string message = 1;
 }
