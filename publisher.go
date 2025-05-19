@@ -7,12 +7,17 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-type Publisher struct {
+type publisher struct {
 	wr *kafka.Writer
 }
 
-func NewPublisher(brokers []string, dialer *kafka.Dialer) *Publisher {
-	return &Publisher{
+type Publisher interface {
+	Publish(ctx context.Context, messages ...proto.Message) error
+	Close() error
+}
+
+func NewPublisher(brokers []string, dialer *kafka.Dialer) *publisher {
+	return &publisher{
 		wr: kafka.NewWriter(kafka.WriterConfig{
 			Brokers:  brokers,
 			Dialer:   dialer,
@@ -21,11 +26,11 @@ func NewPublisher(brokers []string, dialer *kafka.Dialer) *Publisher {
 	}
 }
 
-func (p *Publisher) Close() error {
+func (p *publisher) Close() error {
 	return p.wr.Close()
 }
 
-func (p *Publisher) Publish(ctx context.Context, messages []proto.Message) error {
+func (p *publisher) Publish(ctx context.Context, messages ...proto.Message) error {
 	kfkMsgs := []kafka.Message{}
 
 	for _, m := range messages {

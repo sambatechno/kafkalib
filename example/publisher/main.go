@@ -11,7 +11,6 @@ import (
 	"github.com/sambatechno/kafkalib/kevt"
 	"github.com/segmentio/kafka-go"
 	"github.com/segmentio/kafka-go/sasl/plain"
-	"google.golang.org/protobuf/proto"
 )
 
 func main() {
@@ -45,7 +44,7 @@ func main() {
 		},
 	}
 
-	err = publisher.Publish(context.Background(), []proto.Message{evt})
+	err = publisher.Publish(context.Background(), evt)
 
 	if err != nil {
 		panic(err)

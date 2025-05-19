@@ -8,12 +8,17 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-type Consumer[T proto.Message] struct {
+type consumer[T proto.Message] struct {
 	r        *kafka.Reader
 	newTfunc func() T
 }
 
-func NewConsumer[T proto.Message](brokers []string, groupId string, dialer *kafka.Dialer, newTfunc func() T) (*Consumer[T], error) {
+type Consumer[T proto.Message] interface {
+	ReadMessage(ctx context.Context) (T, error)
+	Close() error
+}
+
+func NewConsumer[T proto.Message](brokers []string, groupId string, dialer *kafka.Dialer, newTfunc func() T) (*consumer[T], error) {
 	t := newTfunc()
 	topic, found := getTopicName(t)
 	if !found {
@@ -27,17 +32,17 @@ func NewConsumer[T proto.Message](brokers []string, groupId string, dialer *kafk
 		Dialer:  dialer,
 	})
 
-	return &Consumer[T]{
+	return &consumer[T]{
 		r:        r,
 		newTfunc: newTfunc,
 	}, nil
 }
 
-func (c *Consumer[T]) Close() error {
+func (c *consumer[T]) Close() error {
 	return c.r.Close()
 }
 
-func (c *Consumer[T]) ReadMessage(ctx context.Context) (T, error) {
+func (c *consumer[T]) ReadMessage(ctx context.Context) (T, error) {
 	t := c.newTfunc()
 
 	m, err := c.r.ReadMessage(ctx)
