@@ -3,12 +3,12 @@ package main
 import (
 	"context"
 	"crypto/tls"
-	"fmt"
 	"time"
 
 	"github.com/sambatechno/kafkalib"
 	"github.com/sambatechno/kafkalib/example"
 	"github.com/sambatechno/kafkalib/gen/kafkalib/msg"
+	"github.com/sambatechno/kafkalib/kevt"
 	"github.com/segmentio/kafka-go"
 	"github.com/segmentio/kafka-go/sasl/plain"
 	"google.golang.org/protobuf/proto"
@@ -38,16 +38,15 @@ func main() {
 		dialer,
 	)
 
-	err = publisher.Publish(context.Background(), []proto.Message{
-		&msg.UserEvent{
-			Body: &msg.UserEvent_RegistrationSuccess_{
-				RegistrationSuccess: &msg.UserEvent_RegistrationSuccess{
-					Email: "test@test.com",
-				},
-			},
-			CreateTimestamp: fmt.Sprint(time.Now().Format(time.RFC3339)),
+	evt := kevt.NewUserEvent()
+	evt.Body = &msg.UserEvent_RegistrationSuccess_{
+		RegistrationSuccess: &msg.UserEvent_RegistrationSuccess{
+			Email: "test@test.com",
 		},
-	})
+	}
+
+	err = publisher.Publish(context.Background(), []proto.Message{evt})
+
 	if err != nil {
 		panic(err)
 	}

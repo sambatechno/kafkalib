@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package kafkalib.msg;
 
+import "google/protobuf/timestamp.proto";
 import "kafkalib/opts/opts.proto";
 
 message UserEvent {
@@ -17,8 +18,8 @@ message UserEvent {
   }
 
   oneof body {
-    RegistrationSuccess registrationSuccess = 1;
+    RegistrationSuccess registration_success = 1;
   }
 
-  string create_timestamp = 2;
+  google.protobuf.Timestamp create_timestamp = 2;
 }

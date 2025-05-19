@@ -10,6 +10,7 @@ import (
 	_ "github.com/sambatechno/kafkalib/gen/kafkalib/opts"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -27,8 +28,8 @@ type UserEvent struct {
 	// Types that are valid to be assigned to Body:
 	//
 	//	*UserEvent_RegistrationSuccess_
-	Body            isUserEvent_Body `protobuf_oneof:"body"`
-	CreateTimestamp string           `protobuf:"bytes,2,opt,name=create_timestamp,json=createTimestamp,proto3" json:"create_timestamp,omitempty"`
+	Body            isUserEvent_Body       `protobuf_oneof:"body"`
+	CreateTimestamp *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=create_timestamp,json=createTimestamp,proto3" json:"create_timestamp,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -79,11 +80,11 @@ func (x *UserEvent) GetRegistrationSuccess() *UserEvent_RegistrationSuccess {
 	return nil
 }
 
-func (x *UserEvent) GetCreateTimestamp() string {
+func (x *UserEvent) GetCreateTimestamp() *timestamppb.Timestamp {
 	if x != nil {
 		return x.CreateTimestamp
 	}
-	return ""
+	return nil
 }
 
 type isUserEvent_Body interface {
@@ -91,7 +92,7 @@ type isUserEvent_Body interface {
 }
 
 type UserEvent_RegistrationSuccess_ struct {
-	RegistrationSuccess *UserEvent_RegistrationSuccess `protobuf:"bytes,1,opt,name=registrationSuccess,proto3,oneof"`
+	RegistrationSuccess *UserEvent_RegistrationSuccess `protobuf:"bytes,1,opt,name=registration_success,json=registrationSuccess,proto3,oneof"`
 }
 
 func (*UserEvent_RegistrationSuccess_) isUserEvent_Body() {}
@@ -184,10 +185,10 @@ var File_kafkalib_msg_user_event_proto protoreflect.FileDescriptor
 
 const file_kafkalib_msg_user_event_proto_rawDesc = "" +
 	"\n" +
-	"\x1dkafkalib/msg/user_event.proto\x12\fkafkalib.msg\x1a\x18kafkalib/opts/opts.proto\"\xfe\x02\n" +
-	"\tUserEvent\x12_\n" +
-	"\x13registrationSuccess\x18\x01 \x01(\v2+.kafkalib.msg.UserEvent.RegistrationSuccessH\x00R\x13registrationSuccess\x12)\n" +
-	"\x10create_timestamp\x18\x02 \x01(\tR\x0fcreateTimestamp\x1a\xcc\x01\n" +
+	"\x1dkafkalib/msg/user_event.proto\x12\fkafkalib.msg\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x18kafkalib/opts/opts.proto\"\x9b\x03\n" +
+	"\tUserEvent\x12`\n" +
+	"\x14registration_success\x18\x01 \x01(\v2+.kafkalib.msg.UserEvent.RegistrationSuccessH\x00R\x13registrationSuccess\x12E\n" +
+	"\x10create_timestamp\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampR\x0fcreateTimestamp\x1a\xcc\x01\n" +
 	"\x13RegistrationSuccess\x12\x14\n" +
 	"\x05email\x18\x01 \x01(\tR\x05email\x12%\n" +
 	"\x0eemail_verified\x18\x02 \x01(\tR\remailVerified\x12\x1d\n" +
@@ -216,14 +217,16 @@ var file_kafkalib_msg_user_event_proto_msgTypes = make([]protoimpl.MessageInfo, 
 var file_kafkalib_msg_user_event_proto_goTypes = []any{
 	(*UserEvent)(nil),                     // 0: kafkalib.msg.UserEvent
 	(*UserEvent_RegistrationSuccess)(nil), // 1: kafkalib.msg.UserEvent.RegistrationSuccess
+	(*timestamppb.Timestamp)(nil),         // 2: google.protobuf.Timestamp
 }
 var file_kafkalib_msg_user_event_proto_depIdxs = []int32{
-	1, // 0: kafkalib.msg.UserEvent.registrationSuccess:type_name -> kafkalib.msg.UserEvent.RegistrationSuccess
-	1, // [1:1] is the sub-list for method output_type
-	1, // [1:1] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	1, // 0: kafkalib.msg.UserEvent.registration_success:type_name -> kafkalib.msg.UserEvent.RegistrationSuccess
+	2, // 1: kafkalib.msg.UserEvent.create_timestamp:type_name -> google.protobuf.Timestamp
+	2, // [2:2] is the sub-list for method output_type
+	2, // [2:2] is the sub-list for method input_type
+	2, // [2:2] is the sub-list for extension type_name
+	2, // [2:2] is the sub-list for extension extendee
+	0, // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_kafkalib_msg_user_event_proto_init() }
