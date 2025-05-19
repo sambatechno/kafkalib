@@ -18,7 +18,7 @@ type Consumer[T proto.Message] interface {
 	Close() error
 }
 
-func NewConsumer[T proto.Message](brokers []string, groupId string, dialer *kafka.Dialer, newTfunc func() T) (*consumer[T], error) {
+func NewConsumer[T proto.Message](brokers []string, groupId string, dialer *kafka.Dialer, newTfunc func() T) (Consumer[T], error) {
 	t := newTfunc()
 	topic, found := getTopicName(t)
 	if !found {

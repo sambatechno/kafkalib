@@ -16,7 +16,7 @@ type Publisher interface {
 	Close() error
 }
 
-func NewPublisher(brokers []string, dialer *kafka.Dialer) *publisher {
+func NewPublisher(brokers []string, dialer *kafka.Dialer) Publisher {
 	return &publisher{
 		wr: kafka.NewWriter(kafka.WriterConfig{
 			Brokers:  brokers,
