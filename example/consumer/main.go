@@ -9,6 +9,7 @@ import (
 	"github.com/sambatechno/kafkalib"
 	"github.com/sambatechno/kafkalib/example"
 	"github.com/sambatechno/kafkalib/gen/kafkalib/msg"
+	"github.com/sambatechno/kafkalib/kevt"
 	"github.com/segmentio/kafka-go"
 	"github.com/segmentio/kafka-go/sasl/plain"
 )
@@ -36,9 +37,7 @@ func main() {
 		cfg.KafkaBrokers,
 		"example-consumer",
 		dialer,
-		func() *msg.UserEvent {
-			return new(msg.UserEvent)
-		},
+		kevt.NewUserEvent,
 	)
 	if err != nil {
 		log.Fatalln("failed to create consumer", err)
