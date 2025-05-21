@@ -27,7 +27,8 @@ func main() {
 			Username: cfg.SASLUsername,
 			Password: cfg.SASLPassword,
 		},
-		ClientID: cfg.PublisherClientID,
+		// ClientID: cfg.PublisherClientID,
+		ClientID: "kafkalib-example-consumer",
 		TLS: &tls.Config{
 			MinVersion: tls.VersionTLS12,
 		},

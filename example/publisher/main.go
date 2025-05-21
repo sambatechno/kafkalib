@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"crypto/tls"
+	"log"
 	"time"
 
 	"github.com/sambatechno/kafkalib"
@@ -14,6 +15,7 @@ import (
 )
 
 func main() {
+	log.Println("init")
 	cfg, err := example.LoadConfigFromFile("config.json")
 	if err != nil {
 		panic(err)
@@ -44,9 +46,13 @@ func main() {
 		},
 	}
 
+	log.Println("starting to publish")
+	startTime := time.Now()
 	err = publisher.Publish(context.Background(), evt)
 
 	if err != nil {
 		panic(err)
 	}
+
+	log.Printf("Published in %s\n", time.Since(startTime))
 }

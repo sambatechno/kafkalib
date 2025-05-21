@@ -28,8 +28,9 @@ type UserEvent struct {
 	// Types that are valid to be assigned to Body:
 	//
 	//	*UserEvent_RegistrationSuccess_
+	//	*UserEvent_EmailVerified_
 	Body            isUserEvent_Body       `protobuf_oneof:"body"`
-	CreateTimestamp *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=create_timestamp,json=createTimestamp,proto3" json:"create_timestamp,omitempty"`
+	CreateTimestamp *timestamppb.Timestamp `protobuf:"bytes,100,opt,name=create_timestamp,json=createTimestamp,proto3" json:"create_timestamp,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -80,6 +81,15 @@ func (x *UserEvent) GetRegistrationSuccess() *UserEvent_RegistrationSuccess {
 	return nil
 }
 
+func (x *UserEvent) GetEmailVerified() *UserEvent_EmailVerified {
+	if x != nil {
+		if x, ok := x.Body.(*UserEvent_EmailVerified_); ok {
+			return x.EmailVerified
+		}
+	}
+	return nil
+}
+
 func (x *UserEvent) GetCreateTimestamp() *timestamppb.Timestamp {
 	if x != nil {
 		return x.CreateTimestamp
@@ -95,12 +105,18 @@ type UserEvent_RegistrationSuccess_ struct {
 	RegistrationSuccess *UserEvent_RegistrationSuccess `protobuf:"bytes,1,opt,name=registration_success,json=registrationSuccess,proto3,oneof"`
 }
 
+type UserEvent_EmailVerified_ struct {
+	EmailVerified *UserEvent_EmailVerified `protobuf:"bytes,2,opt,name=email_verified,json=emailVerified,proto3,oneof"`
+}
+
 func (*UserEvent_RegistrationSuccess_) isUserEvent_Body() {}
+
+func (*UserEvent_EmailVerified_) isUserEvent_Body() {}
 
 type UserEvent_RegistrationSuccess struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Email         string                 `protobuf:"bytes,1,opt,name=email,proto3" json:"email,omitempty"`
-	EmailVerified string                 `protobuf:"bytes,2,opt,name=email_verified,json=emailVerified,proto3" json:"email_verified,omitempty"`
+	EmailVerified bool                   `protobuf:"varint,2,opt,name=email_verified,json=emailVerified,proto3" json:"email_verified,omitempty"`
 	FirstName     string                 `protobuf:"bytes,3,opt,name=first_name,json=firstName,proto3" json:"first_name,omitempty"`
 	LastName      string                 `protobuf:"bytes,4,opt,name=last_name,json=lastName,proto3" json:"last_name,omitempty"`
 	Phone         string                 `protobuf:"bytes,5,opt,name=phone,proto3" json:"phone,omitempty"`
@@ -146,11 +162,11 @@ func (x *UserEvent_RegistrationSuccess) GetEmail() string {
 	return ""
 }
 
-func (x *UserEvent_RegistrationSuccess) GetEmailVerified() string {
+func (x *UserEvent_RegistrationSuccess) GetEmailVerified() bool {
 	if x != nil {
 		return x.EmailVerified
 	}
-	return ""
+	return false
 }
 
 func (x *UserEvent_RegistrationSuccess) GetFirstName() string {
@@ -181,22 +197,69 @@ func (x *UserEvent_RegistrationSuccess) GetUserCreatedBy() string {
 	return ""
 }
 
+type UserEvent_EmailVerified struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Email         string                 `protobuf:"bytes,1,opt,name=email,proto3" json:"email,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UserEvent_EmailVerified) Reset() {
+	*x = UserEvent_EmailVerified{}
+	mi := &file_kafkalib_msg_user_event_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UserEvent_EmailVerified) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UserEvent_EmailVerified) ProtoMessage() {}
+
+func (x *UserEvent_EmailVerified) ProtoReflect() protoreflect.Message {
+	mi := &file_kafkalib_msg_user_event_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UserEvent_EmailVerified.ProtoReflect.Descriptor instead.
+func (*UserEvent_EmailVerified) Descriptor() ([]byte, []int) {
+	return file_kafkalib_msg_user_event_proto_rawDescGZIP(), []int{0, 1}
+}
+
+func (x *UserEvent_EmailVerified) GetEmail() string {
+	if x != nil {
+		return x.Email
+	}
+	return ""
+}
+
 var File_kafkalib_msg_user_event_proto protoreflect.FileDescriptor
 
 const file_kafkalib_msg_user_event_proto_rawDesc = "" +
 	"\n" +
-	"\x1dkafkalib/msg/user_event.proto\x12\fkafkalib.msg\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x18kafkalib/opts/opts.proto\"\x9b\x03\n" +
+	"\x1dkafkalib/msg/user_event.proto\x12\fkafkalib.msg\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x18kafkalib/opts/opts.proto\"\x92\x04\n" +
 	"\tUserEvent\x12`\n" +
-	"\x14registration_success\x18\x01 \x01(\v2+.kafkalib.msg.UserEvent.RegistrationSuccessH\x00R\x13registrationSuccess\x12E\n" +
-	"\x10create_timestamp\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampR\x0fcreateTimestamp\x1a\xcc\x01\n" +
+	"\x14registration_success\x18\x01 \x01(\v2+.kafkalib.msg.UserEvent.RegistrationSuccessH\x00R\x13registrationSuccess\x12N\n" +
+	"\x0eemail_verified\x18\x02 \x01(\v2%.kafkalib.msg.UserEvent.EmailVerifiedH\x00R\remailVerified\x12E\n" +
+	"\x10create_timestamp\x18d \x01(\v2\x1a.google.protobuf.TimestampR\x0fcreateTimestamp\x1a\xcc\x01\n" +
 	"\x13RegistrationSuccess\x12\x14\n" +
 	"\x05email\x18\x01 \x01(\tR\x05email\x12%\n" +
-	"\x0eemail_verified\x18\x02 \x01(\tR\remailVerified\x12\x1d\n" +
+	"\x0eemail_verified\x18\x02 \x01(\bR\remailVerified\x12\x1d\n" +
 	"\n" +
 	"first_name\x18\x03 \x01(\tR\tfirstName\x12\x1b\n" +
 	"\tlast_name\x18\x04 \x01(\tR\blastName\x12\x14\n" +
 	"\x05phone\x18\x05 \x01(\tR\x05phone\x12&\n" +
-	"\x0fuser_created_by\x18\x06 \x01(\tR\ruserCreatedBy:\x0e\x82\xa6\x1d\n" +
+	"\x0fuser_created_by\x18\x06 \x01(\tR\ruserCreatedBy\x1a%\n" +
+	"\rEmailVerified\x12\x14\n" +
+	"\x05email\x18\x01 \x01(\tR\x05email:\x0e\x82\xa6\x1d\n" +
 	"user-eventB\x06\n" +
 	"\x04bodyB\xa5\x01\n" +
 	"\x10com.kafkalib.msgB\x0eUserEventProtoP\x01Z0github.com/sambatechno/kafkalib/gen/kafkalib/msg\xa2\x02\x03KMX\xaa\x02\fKafkalib.Msg\xca\x02\fKafkalib\\Msg\xe2\x02\x18Kafkalib\\Msg\\GPBMetadata\xea\x02\rKafkalib::Msgb\x06proto3"
@@ -213,20 +276,22 @@ func file_kafkalib_msg_user_event_proto_rawDescGZIP() []byte {
 	return file_kafkalib_msg_user_event_proto_rawDescData
 }
 
-var file_kafkalib_msg_user_event_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_kafkalib_msg_user_event_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
 var file_kafkalib_msg_user_event_proto_goTypes = []any{
 	(*UserEvent)(nil),                     // 0: kafkalib.msg.UserEvent
 	(*UserEvent_RegistrationSuccess)(nil), // 1: kafkalib.msg.UserEvent.RegistrationSuccess
-	(*timestamppb.Timestamp)(nil),         // 2: google.protobuf.Timestamp
+	(*UserEvent_EmailVerified)(nil),       // 2: kafkalib.msg.UserEvent.EmailVerified
+	(*timestamppb.Timestamp)(nil),         // 3: google.protobuf.Timestamp
 }
 var file_kafkalib_msg_user_event_proto_depIdxs = []int32{
 	1, // 0: kafkalib.msg.UserEvent.registration_success:type_name -> kafkalib.msg.UserEvent.RegistrationSuccess
-	2, // 1: kafkalib.msg.UserEvent.create_timestamp:type_name -> google.protobuf.Timestamp
-	2, // [2:2] is the sub-list for method output_type
-	2, // [2:2] is the sub-list for method input_type
-	2, // [2:2] is the sub-list for extension type_name
-	2, // [2:2] is the sub-list for extension extendee
-	0, // [0:2] is the sub-list for field type_name
+	2, // 1: kafkalib.msg.UserEvent.email_verified:type_name -> kafkalib.msg.UserEvent.EmailVerified
+	3, // 2: kafkalib.msg.UserEvent.create_timestamp:type_name -> google.protobuf.Timestamp
+	3, // [3:3] is the sub-list for method output_type
+	3, // [3:3] is the sub-list for method input_type
+	3, // [3:3] is the sub-list for extension type_name
+	3, // [3:3] is the sub-list for extension extendee
+	0, // [0:3] is the sub-list for field type_name
 }
 
 func init() { file_kafkalib_msg_user_event_proto_init() }
@@ -236,6 +301,7 @@ func file_kafkalib_msg_user_event_proto_init() {
 	}
 	file_kafkalib_msg_user_event_proto_msgTypes[0].OneofWrappers = []any{
 		(*UserEvent_RegistrationSuccess_)(nil),
+		(*UserEvent_EmailVerified_)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -243,7 +309,7 @@ func file_kafkalib_msg_user_event_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_kafkalib_msg_user_event_proto_rawDesc), len(file_kafkalib_msg_user_event_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   3,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
