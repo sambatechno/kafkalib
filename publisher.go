@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/segmentio/kafka-go"
+	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
 )
 
@@ -38,7 +39,7 @@ func (p *publisher) Publish(ctx context.Context, messages ...proto.Message) erro
 		if !found {
 			return NewErrMissingTopic(m)
 		}
-		mv, _ := proto.Marshal(m)
+		mv, _ := protojson.Marshal(m)
 		km := kafka.Message{
 			Topic: topic,
 			Value: mv,

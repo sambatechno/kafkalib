@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"crypto/tls"
+	"fmt"
 	"log"
 	"time"
 
@@ -44,11 +45,14 @@ func main() {
 		log.Fatalln("failed to create consumer", err)
 	}
 
+	fmt.Println("start consume")
+
 	for {
 		m, err := consumer.ReadMessage(context.Background())
 		if err != nil {
 			log.Println("err reading", err)
-			break
+			// break
+			continue
 		}
 		switch body := m.Body.(type) {
 		case *msg.UserEvent_RegistrationSuccess_:

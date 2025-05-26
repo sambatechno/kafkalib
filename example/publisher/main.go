@@ -45,6 +45,10 @@ func main() {
 			Email: "test@test.com",
 		},
 	}
+	evt.TenantMeta = &msg.TenantMeta{
+		TenantId:   "uuid",
+		TenantName: "test",
+	}
 
 	log.Println("starting to publish")
 	startTime := time.Now()

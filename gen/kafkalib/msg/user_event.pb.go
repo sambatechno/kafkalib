@@ -30,6 +30,7 @@ type UserEvent struct {
 	//	*UserEvent_RegistrationSuccess_
 	//	*UserEvent_EmailVerified_
 	Body            isUserEvent_Body       `protobuf_oneof:"body"`
+	TenantMeta      *TenantMeta            `protobuf:"bytes,50,opt,name=tenant_meta,json=tenantMeta,proto3" json:"tenant_meta,omitempty"`
 	CreateTimestamp *timestamppb.Timestamp `protobuf:"bytes,100,opt,name=create_timestamp,json=createTimestamp,proto3" json:"create_timestamp,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
@@ -86,6 +87,13 @@ func (x *UserEvent) GetEmailVerified() *UserEvent_EmailVerified {
 		if x, ok := x.Body.(*UserEvent_EmailVerified_); ok {
 			return x.EmailVerified
 		}
+	}
+	return nil
+}
+
+func (x *UserEvent) GetTenantMeta() *TenantMeta {
+	if x != nil {
+		return x.TenantMeta
 	}
 	return nil
 }
@@ -245,10 +253,12 @@ var File_kafkalib_msg_user_event_proto protoreflect.FileDescriptor
 
 const file_kafkalib_msg_user_event_proto_rawDesc = "" +
 	"\n" +
-	"\x1dkafkalib/msg/user_event.proto\x12\fkafkalib.msg\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x18kafkalib/opts/opts.proto\"\x92\x04\n" +
+	"\x1dkafkalib/msg/user_event.proto\x12\fkafkalib.msg\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1ekafkalib/msg/tenant_meta.proto\x1a\x18kafkalib/opts/opts.proto\"\xcd\x04\n" +
 	"\tUserEvent\x12`\n" +
 	"\x14registration_success\x18\x01 \x01(\v2+.kafkalib.msg.UserEvent.RegistrationSuccessH\x00R\x13registrationSuccess\x12N\n" +
-	"\x0eemail_verified\x18\x02 \x01(\v2%.kafkalib.msg.UserEvent.EmailVerifiedH\x00R\remailVerified\x12E\n" +
+	"\x0eemail_verified\x18\x02 \x01(\v2%.kafkalib.msg.UserEvent.EmailVerifiedH\x00R\remailVerified\x129\n" +
+	"\vtenant_meta\x182 \x01(\v2\x18.kafkalib.msg.TenantMetaR\n" +
+	"tenantMeta\x12E\n" +
 	"\x10create_timestamp\x18d \x01(\v2\x1a.google.protobuf.TimestampR\x0fcreateTimestamp\x1a\xcc\x01\n" +
 	"\x13RegistrationSuccess\x12\x14\n" +
 	"\x05email\x18\x01 \x01(\tR\x05email\x12%\n" +
@@ -281,17 +291,19 @@ var file_kafkalib_msg_user_event_proto_goTypes = []any{
 	(*UserEvent)(nil),                     // 0: kafkalib.msg.UserEvent
 	(*UserEvent_RegistrationSuccess)(nil), // 1: kafkalib.msg.UserEvent.RegistrationSuccess
 	(*UserEvent_EmailVerified)(nil),       // 2: kafkalib.msg.UserEvent.EmailVerified
-	(*timestamppb.Timestamp)(nil),         // 3: google.protobuf.Timestamp
+	(*TenantMeta)(nil),                    // 3: kafkalib.msg.TenantMeta
+	(*timestamppb.Timestamp)(nil),         // 4: google.protobuf.Timestamp
 }
 var file_kafkalib_msg_user_event_proto_depIdxs = []int32{
 	1, // 0: kafkalib.msg.UserEvent.registration_success:type_name -> kafkalib.msg.UserEvent.RegistrationSuccess
 	2, // 1: kafkalib.msg.UserEvent.email_verified:type_name -> kafkalib.msg.UserEvent.EmailVerified
-	3, // 2: kafkalib.msg.UserEvent.create_timestamp:type_name -> google.protobuf.Timestamp
-	3, // [3:3] is the sub-list for method output_type
-	3, // [3:3] is the sub-list for method input_type
-	3, // [3:3] is the sub-list for extension type_name
-	3, // [3:3] is the sub-list for extension extendee
-	0, // [0:3] is the sub-list for field type_name
+	3, // 2: kafkalib.msg.UserEvent.tenant_meta:type_name -> kafkalib.msg.TenantMeta
+	4, // 3: kafkalib.msg.UserEvent.create_timestamp:type_name -> google.protobuf.Timestamp
+	4, // [4:4] is the sub-list for method output_type
+	4, // [4:4] is the sub-list for method input_type
+	4, // [4:4] is the sub-list for extension type_name
+	4, // [4:4] is the sub-list for extension extendee
+	0, // [0:4] is the sub-list for field type_name
 }
 
 func init() { file_kafkalib_msg_user_event_proto_init() }
@@ -299,6 +311,7 @@ func file_kafkalib_msg_user_event_proto_init() {
 	if File_kafkalib_msg_user_event_proto != nil {
 		return
 	}
+	file_kafkalib_msg_tenant_meta_proto_init()
 	file_kafkalib_msg_user_event_proto_msgTypes[0].OneofWrappers = []any{
 		(*UserEvent_RegistrationSuccess_)(nil),
 		(*UserEvent_EmailVerified_)(nil),

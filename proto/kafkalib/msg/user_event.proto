@@ -3,6 +3,7 @@ syntax = "proto3";
 package kafkalib.msg;
 
 import "google/protobuf/timestamp.proto";
+import "kafkalib/msg/tenant_meta.proto";
 import "kafkalib/opts/opts.proto";
 
 message UserEvent {
@@ -25,6 +26,8 @@ message UserEvent {
     RegistrationSuccess registration_success = 1;
     EmailVerified email_verified = 2;
   }
+
+  TenantMeta tenant_meta = 50;
 
   google.protobuf.Timestamp create_timestamp = 100;
 }

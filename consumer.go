@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/segmentio/kafka-go"
+	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
 )
 
@@ -49,8 +50,9 @@ func (c *consumer[T]) ReadMessage(ctx context.Context) (T, error) {
 	if err != nil {
 		return t, err
 	}
+	fmt.Printf("%#v\n", string(m.Value))
 
-	if err := proto.Unmarshal(m.Value, t); err != nil {
+	if err := protojson.Unmarshal(m.Value, t); err != nil {
 		return t, fmt.Errorf("failed to unmarshal: %w", err)
 	}
 

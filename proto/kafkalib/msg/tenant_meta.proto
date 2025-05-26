@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+package kafkalib.msg;
+
+message TenantMeta {
+  string tenant_id = 1;
+  string tenant_name = 2;
+}
