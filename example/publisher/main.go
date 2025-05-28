@@ -12,6 +12,7 @@ import (
 	"github.com/sambatechno/kafkalib/kevt"
 	"github.com/segmentio/kafka-go"
 	"github.com/segmentio/kafka-go/sasl/plain"
+	"google.golang.org/protobuf/proto"
 )
 
 func main() {
@@ -52,7 +53,16 @@ func main() {
 
 	log.Println("starting to publish")
 	startTime := time.Now()
-	err = publisher.Publish(context.Background(), evt)
+	err = publisher.Publish(context.Background(),
+		[]proto.Message{evt},
+		kafkalib.WithStaticHeader("X-Api-Key", []byte("test")),
+		kafkalib.WithHeader(func(pm proto.Message) []kafka.Header {
+			m := pm.(*msg.UserEvent)
+			headers := append([]kafka.Header{}, kafka.Header{"X-Tenant-Id", []byte(m.TenantMeta.TenantId)})
+
+			return headers
+		}),
+	)
 
 	if err != nil {
 		panic(err)
