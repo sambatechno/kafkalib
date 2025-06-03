@@ -30,6 +30,7 @@ type UserEvent struct {
 	//	*UserEvent_RegistrationSuccess_
 	//	*UserEvent_EmailVerified_
 	Body            isUserEvent_Body       `protobuf_oneof:"body"`
+	UserUuid        string                 `protobuf:"bytes,30,opt,name=user_uuid,json=userUuid,proto3" json:"user_uuid,omitempty"`
 	TenantMeta      *TenantMeta            `protobuf:"bytes,50,opt,name=tenant_meta,json=tenantMeta,proto3" json:"tenant_meta,omitempty"`
 	CreateTimestamp *timestamppb.Timestamp `protobuf:"bytes,100,opt,name=create_timestamp,json=createTimestamp,proto3" json:"create_timestamp,omitempty"`
 	unknownFields   protoimpl.UnknownFields
@@ -89,6 +90,13 @@ func (x *UserEvent) GetEmailVerified() *UserEvent_EmailVerified {
 		}
 	}
 	return nil
+}
+
+func (x *UserEvent) GetUserUuid() string {
+	if x != nil {
+		return x.UserUuid
+	}
+	return ""
 }
 
 func (x *UserEvent) GetTenantMeta() *TenantMeta {
@@ -253,10 +261,11 @@ var File_kafkalib_msg_user_event_proto protoreflect.FileDescriptor
 
 const file_kafkalib_msg_user_event_proto_rawDesc = "" +
 	"\n" +
-	"\x1dkafkalib/msg/user_event.proto\x12\fkafkalib.msg\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1ekafkalib/msg/tenant_meta.proto\x1a\x18kafkalib/opts/opts.proto\"\xcd\x04\n" +
+	"\x1dkafkalib/msg/user_event.proto\x12\fkafkalib.msg\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1ekafkalib/msg/tenant_meta.proto\x1a\x18kafkalib/opts/opts.proto\"\xea\x04\n" +
 	"\tUserEvent\x12`\n" +
 	"\x14registration_success\x18\x01 \x01(\v2+.kafkalib.msg.UserEvent.RegistrationSuccessH\x00R\x13registrationSuccess\x12N\n" +
-	"\x0eemail_verified\x18\x02 \x01(\v2%.kafkalib.msg.UserEvent.EmailVerifiedH\x00R\remailVerified\x129\n" +
+	"\x0eemail_verified\x18\x02 \x01(\v2%.kafkalib.msg.UserEvent.EmailVerifiedH\x00R\remailVerified\x12\x1b\n" +
+	"\tuser_uuid\x18\x1e \x01(\tR\buserUuid\x129\n" +
 	"\vtenant_meta\x182 \x01(\v2\x18.kafkalib.msg.TenantMetaR\n" +
 	"tenantMeta\x12E\n" +
 	"\x10create_timestamp\x18d \x01(\v2\x1a.google.protobuf.TimestampR\x0fcreateTimestamp\x1a\xcc\x01\n" +

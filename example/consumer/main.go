@@ -39,7 +39,7 @@ func main() {
 		cfg.KafkaBrokers,
 		"example-consumer",
 		dialer,
-		kevt.NewUserEvent,
+		kevt.NewEmptyUserEvent,
 	)
 	if err != nil {
 		log.Fatalln("failed to create consumer", err)

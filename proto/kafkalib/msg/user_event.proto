@@ -27,6 +27,8 @@ message UserEvent {
     EmailVerified email_verified = 2;
   }
 
+  string user_uuid = 30;
+
   TenantMeta tenant_meta = 50;
 
   google.protobuf.Timestamp create_timestamp = 100;
