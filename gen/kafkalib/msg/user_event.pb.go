@@ -24,17 +24,19 @@ const (
 )
 
 type UserEvent struct {
-	state protoimpl.MessageState `protogen:"open.v1"`
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	UserUuid        string                 `protobuf:"bytes,30,opt,name=user_uuid,json=userUuid,proto3" json:"user_uuid,omitempty"`
+	UserId          int64                  `protobuf:"varint,31,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	TenantMeta      *TenantMeta            `protobuf:"bytes,50,opt,name=tenant_meta,json=tenantMeta,proto3" json:"tenant_meta,omitempty"`
+	CreateTimestamp *timestamppb.Timestamp `protobuf:"bytes,100,opt,name=create_timestamp,json=createTimestamp,proto3" json:"create_timestamp,omitempty"`
 	// Types that are valid to be assigned to Body:
 	//
 	//	*UserEvent_RegistrationSuccess_
 	//	*UserEvent_EmailVerified_
-	Body            isUserEvent_Body       `protobuf_oneof:"body"`
-	UserUuid        string                 `protobuf:"bytes,30,opt,name=user_uuid,json=userUuid,proto3" json:"user_uuid,omitempty"`
-	TenantMeta      *TenantMeta            `protobuf:"bytes,50,opt,name=tenant_meta,json=tenantMeta,proto3" json:"tenant_meta,omitempty"`
-	CreateTimestamp *timestamppb.Timestamp `protobuf:"bytes,100,opt,name=create_timestamp,json=createTimestamp,proto3" json:"create_timestamp,omitempty"`
-	unknownFields   protoimpl.UnknownFields
-	sizeCache       protoimpl.SizeCache
+	//	*UserEvent_VoucherCreated_
+	Body          isUserEvent_Body `protobuf_oneof:"body"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *UserEvent) Reset() {
@@ -67,6 +69,34 @@ func (*UserEvent) Descriptor() ([]byte, []int) {
 	return file_kafkalib_msg_user_event_proto_rawDescGZIP(), []int{0}
 }
 
+func (x *UserEvent) GetUserUuid() string {
+	if x != nil {
+		return x.UserUuid
+	}
+	return ""
+}
+
+func (x *UserEvent) GetUserId() int64 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
+}
+
+func (x *UserEvent) GetTenantMeta() *TenantMeta {
+	if x != nil {
+		return x.TenantMeta
+	}
+	return nil
+}
+
+func (x *UserEvent) GetCreateTimestamp() *timestamppb.Timestamp {
+	if x != nil {
+		return x.CreateTimestamp
+	}
+	return nil
+}
+
 func (x *UserEvent) GetBody() isUserEvent_Body {
 	if x != nil {
 		return x.Body
@@ -92,23 +122,11 @@ func (x *UserEvent) GetEmailVerified() *UserEvent_EmailVerified {
 	return nil
 }
 
-func (x *UserEvent) GetUserUuid() string {
+func (x *UserEvent) GetVoucherCreated() *UserEvent_VoucherCreated {
 	if x != nil {
-		return x.UserUuid
-	}
-	return ""
-}
-
-func (x *UserEvent) GetTenantMeta() *TenantMeta {
-	if x != nil {
-		return x.TenantMeta
-	}
-	return nil
-}
-
-func (x *UserEvent) GetCreateTimestamp() *timestamppb.Timestamp {
-	if x != nil {
-		return x.CreateTimestamp
+		if x, ok := x.Body.(*UserEvent_VoucherCreated_); ok {
+			return x.VoucherCreated
+		}
 	}
 	return nil
 }
@@ -125,9 +143,15 @@ type UserEvent_EmailVerified_ struct {
 	EmailVerified *UserEvent_EmailVerified `protobuf:"bytes,2,opt,name=email_verified,json=emailVerified,proto3,oneof"`
 }
 
+type UserEvent_VoucherCreated_ struct {
+	VoucherCreated *UserEvent_VoucherCreated `protobuf:"bytes,3,opt,name=voucher_created,json=voucherCreated,proto3,oneof"`
+}
+
 func (*UserEvent_RegistrationSuccess_) isUserEvent_Body() {}
 
 func (*UserEvent_EmailVerified_) isUserEvent_Body() {}
+
+func (*UserEvent_VoucherCreated_) isUserEvent_Body() {}
 
 type UserEvent_RegistrationSuccess struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -257,18 +281,112 @@ func (x *UserEvent_EmailVerified) GetEmail() string {
 	return ""
 }
 
+type UserEvent_VoucherCreated struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	Code            string                 `protobuf:"bytes,1,opt,name=code,proto3" json:"code,omitempty"`
+	VoucherType     string                 `protobuf:"bytes,2,opt,name=voucher_type,json=voucherType,proto3" json:"voucher_type,omitempty"`
+	Status          string                 `protobuf:"bytes,3,opt,name=status,proto3" json:"status,omitempty"`
+	PromotionId     string                 `protobuf:"bytes,4,opt,name=promotion_id,json=promotionId,proto3" json:"promotion_id,omitempty"`
+	ExpiredAt       string                 `protobuf:"bytes,5,opt,name=expired_at,json=expiredAt,proto3" json:"expired_at,omitempty"`
+	GeneratedYear   int64                  `protobuf:"varint,6,opt,name=generated_year,json=generatedYear,proto3" json:"generated_year,omitempty"`
+	RedemptionLimit int64                  `protobuf:"varint,7,opt,name=redemption_limit,json=redemptionLimit,proto3" json:"redemption_limit,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *UserEvent_VoucherCreated) Reset() {
+	*x = UserEvent_VoucherCreated{}
+	mi := &file_kafkalib_msg_user_event_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UserEvent_VoucherCreated) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UserEvent_VoucherCreated) ProtoMessage() {}
+
+func (x *UserEvent_VoucherCreated) ProtoReflect() protoreflect.Message {
+	mi := &file_kafkalib_msg_user_event_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UserEvent_VoucherCreated.ProtoReflect.Descriptor instead.
+func (*UserEvent_VoucherCreated) Descriptor() ([]byte, []int) {
+	return file_kafkalib_msg_user_event_proto_rawDescGZIP(), []int{0, 2}
+}
+
+func (x *UserEvent_VoucherCreated) GetCode() string {
+	if x != nil {
+		return x.Code
+	}
+	return ""
+}
+
+func (x *UserEvent_VoucherCreated) GetVoucherType() string {
+	if x != nil {
+		return x.VoucherType
+	}
+	return ""
+}
+
+func (x *UserEvent_VoucherCreated) GetStatus() string {
+	if x != nil {
+		return x.Status
+	}
+	return ""
+}
+
+func (x *UserEvent_VoucherCreated) GetPromotionId() string {
+	if x != nil {
+		return x.PromotionId
+	}
+	return ""
+}
+
+func (x *UserEvent_VoucherCreated) GetExpiredAt() string {
+	if x != nil {
+		return x.ExpiredAt
+	}
+	return ""
+}
+
+func (x *UserEvent_VoucherCreated) GetGeneratedYear() int64 {
+	if x != nil {
+		return x.GeneratedYear
+	}
+	return 0
+}
+
+func (x *UserEvent_VoucherCreated) GetRedemptionLimit() int64 {
+	if x != nil {
+		return x.RedemptionLimit
+	}
+	return 0
+}
+
 var File_kafkalib_msg_user_event_proto protoreflect.FileDescriptor
 
 const file_kafkalib_msg_user_event_proto_rawDesc = "" +
 	"\n" +
-	"\x1dkafkalib/msg/user_event.proto\x12\fkafkalib.msg\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1ekafkalib/msg/tenant_meta.proto\x1a\x18kafkalib/opts/opts.proto\"\xea\x04\n" +
-	"\tUserEvent\x12`\n" +
-	"\x14registration_success\x18\x01 \x01(\v2+.kafkalib.msg.UserEvent.RegistrationSuccessH\x00R\x13registrationSuccess\x12N\n" +
-	"\x0eemail_verified\x18\x02 \x01(\v2%.kafkalib.msg.UserEvent.EmailVerifiedH\x00R\remailVerified\x12\x1b\n" +
-	"\tuser_uuid\x18\x1e \x01(\tR\buserUuid\x129\n" +
+	"\x1dkafkalib/msg/user_event.proto\x12\fkafkalib.msg\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1ekafkalib/msg/tenant_meta.proto\x1a\x18kafkalib/opts/opts.proto\"\xcc\a\n" +
+	"\tUserEvent\x12\x1b\n" +
+	"\tuser_uuid\x18\x1e \x01(\tR\buserUuid\x12\x17\n" +
+	"\auser_id\x18\x1f \x01(\x03R\x06userId\x129\n" +
 	"\vtenant_meta\x182 \x01(\v2\x18.kafkalib.msg.TenantMetaR\n" +
 	"tenantMeta\x12E\n" +
-	"\x10create_timestamp\x18d \x01(\v2\x1a.google.protobuf.TimestampR\x0fcreateTimestamp\x1a\xcc\x01\n" +
+	"\x10create_timestamp\x18d \x01(\v2\x1a.google.protobuf.TimestampR\x0fcreateTimestamp\x12`\n" +
+	"\x14registration_success\x18\x01 \x01(\v2+.kafkalib.msg.UserEvent.RegistrationSuccessH\x00R\x13registrationSuccess\x12N\n" +
+	"\x0eemail_verified\x18\x02 \x01(\v2%.kafkalib.msg.UserEvent.EmailVerifiedH\x00R\remailVerified\x12Q\n" +
+	"\x0fvoucher_created\x18\x03 \x01(\v2&.kafkalib.msg.UserEvent.VoucherCreatedH\x00R\x0evoucherCreated\x1a\xcc\x01\n" +
 	"\x13RegistrationSuccess\x12\x14\n" +
 	"\x05email\x18\x01 \x01(\tR\x05email\x12%\n" +
 	"\x0eemail_verified\x18\x02 \x01(\bR\remailVerified\x12\x1d\n" +
@@ -278,7 +396,16 @@ const file_kafkalib_msg_user_event_proto_rawDesc = "" +
 	"\x05phone\x18\x05 \x01(\tR\x05phone\x12&\n" +
 	"\x0fuser_created_by\x18\x06 \x01(\tR\ruserCreatedBy\x1a%\n" +
 	"\rEmailVerified\x12\x14\n" +
-	"\x05email\x18\x01 \x01(\tR\x05email:\x0e\x82\xa6\x1d\n" +
+	"\x05email\x18\x01 \x01(\tR\x05email\x1a\xf3\x01\n" +
+	"\x0eVoucherCreated\x12\x12\n" +
+	"\x04code\x18\x01 \x01(\tR\x04code\x12!\n" +
+	"\fvoucher_type\x18\x02 \x01(\tR\vvoucherType\x12\x16\n" +
+	"\x06status\x18\x03 \x01(\tR\x06status\x12!\n" +
+	"\fpromotion_id\x18\x04 \x01(\tR\vpromotionId\x12\x1d\n" +
+	"\n" +
+	"expired_at\x18\x05 \x01(\tR\texpiredAt\x12%\n" +
+	"\x0egenerated_year\x18\x06 \x01(\x03R\rgeneratedYear\x12)\n" +
+	"\x10redemption_limit\x18\a \x01(\x03R\x0fredemptionLimit:\x0e\x82\xa6\x1d\n" +
 	"user-eventB\x06\n" +
 	"\x04bodyB\xa5\x01\n" +
 	"\x10com.kafkalib.msgB\x0eUserEventProtoP\x01Z0github.com/sambatechno/kafkalib/gen/kafkalib/msg\xa2\x02\x03KMX\xaa\x02\fKafkalib.Msg\xca\x02\fKafkalib\\Msg\xe2\x02\x18Kafkalib\\Msg\\GPBMetadata\xea\x02\rKafkalib::Msgb\x06proto3"
@@ -295,24 +422,26 @@ func file_kafkalib_msg_user_event_proto_rawDescGZIP() []byte {
 	return file_kafkalib_msg_user_event_proto_rawDescData
 }
 
-var file_kafkalib_msg_user_event_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
+var file_kafkalib_msg_user_event_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_kafkalib_msg_user_event_proto_goTypes = []any{
 	(*UserEvent)(nil),                     // 0: kafkalib.msg.UserEvent
 	(*UserEvent_RegistrationSuccess)(nil), // 1: kafkalib.msg.UserEvent.RegistrationSuccess
 	(*UserEvent_EmailVerified)(nil),       // 2: kafkalib.msg.UserEvent.EmailVerified
-	(*TenantMeta)(nil),                    // 3: kafkalib.msg.TenantMeta
-	(*timestamppb.Timestamp)(nil),         // 4: google.protobuf.Timestamp
+	(*UserEvent_VoucherCreated)(nil),      // 3: kafkalib.msg.UserEvent.VoucherCreated
+	(*TenantMeta)(nil),                    // 4: kafkalib.msg.TenantMeta
+	(*timestamppb.Timestamp)(nil),         // 5: google.protobuf.Timestamp
 }
 var file_kafkalib_msg_user_event_proto_depIdxs = []int32{
-	1, // 0: kafkalib.msg.UserEvent.registration_success:type_name -> kafkalib.msg.UserEvent.RegistrationSuccess
-	2, // 1: kafkalib.msg.UserEvent.email_verified:type_name -> kafkalib.msg.UserEvent.EmailVerified
-	3, // 2: kafkalib.msg.UserEvent.tenant_meta:type_name -> kafkalib.msg.TenantMeta
-	4, // 3: kafkalib.msg.UserEvent.create_timestamp:type_name -> google.protobuf.Timestamp
-	4, // [4:4] is the sub-list for method output_type
-	4, // [4:4] is the sub-list for method input_type
-	4, // [4:4] is the sub-list for extension type_name
-	4, // [4:4] is the sub-list for extension extendee
-	0, // [0:4] is the sub-list for field type_name
+	4, // 0: kafkalib.msg.UserEvent.tenant_meta:type_name -> kafkalib.msg.TenantMeta
+	5, // 1: kafkalib.msg.UserEvent.create_timestamp:type_name -> google.protobuf.Timestamp
+	1, // 2: kafkalib.msg.UserEvent.registration_success:type_name -> kafkalib.msg.UserEvent.RegistrationSuccess
+	2, // 3: kafkalib.msg.UserEvent.email_verified:type_name -> kafkalib.msg.UserEvent.EmailVerified
+	3, // 4: kafkalib.msg.UserEvent.voucher_created:type_name -> kafkalib.msg.UserEvent.VoucherCreated
+	5, // [5:5] is the sub-list for method output_type
+	5, // [5:5] is the sub-list for method input_type
+	5, // [5:5] is the sub-list for extension type_name
+	5, // [5:5] is the sub-list for extension extendee
+	0, // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_kafkalib_msg_user_event_proto_init() }
@@ -324,6 +453,7 @@ func file_kafkalib_msg_user_event_proto_init() {
 	file_kafkalib_msg_user_event_proto_msgTypes[0].OneofWrappers = []any{
 		(*UserEvent_RegistrationSuccess_)(nil),
 		(*UserEvent_EmailVerified_)(nil),
+		(*UserEvent_VoucherCreated_)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -331,7 +461,7 @@ func file_kafkalib_msg_user_event_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_kafkalib_msg_user_event_proto_rawDesc), len(file_kafkalib_msg_user_event_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   3,
+			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

@@ -9,6 +9,13 @@ import "kafkalib/opts/opts.proto";
 message UserEvent {
   option (kafkalib.opts.topic_name) = "user-event";
 
+  string user_uuid = 30;
+  int64 user_id = 31;
+
+  TenantMeta tenant_meta = 50;
+
+  google.protobuf.Timestamp create_timestamp = 100;
+
   message RegistrationSuccess {
     string email = 1;
     bool email_verified = 2;
@@ -22,14 +29,19 @@ message UserEvent {
     string email = 1;
   }
 
+  message VoucherCreated {
+    string code = 1;
+    string voucher_type = 2;
+    string status = 3;
+    string promotion_id = 4;
+    string expired_at = 5;
+    int64 generated_year = 6;
+    int64 redemption_limit = 7;
+  }
+
   oneof body {
     RegistrationSuccess registration_success = 1;
     EmailVerified email_verified = 2;
+    VoucherCreated voucher_created = 3;
   }
-
-  string user_uuid = 30;
-
-  TenantMeta tenant_meta = 50;
-
-  google.protobuf.Timestamp create_timestamp = 100;
 }
