@@ -10,9 +10,8 @@ func NewEmptyUserEvent() *msg.UserEvent {
 }
 
 // NewUserEvent generates new user event struct with the default fields filled, so only `Body` needs to be filled.
-func NewUserEvent(userUuid string) *msg.UserEvent {
+func NewUserEvent() *msg.UserEvent {
 	return &msg.UserEvent{
 		CreateTimestamp: timestamppb.Now(),
-		UserUuid:        userUuid,
 	}
 }

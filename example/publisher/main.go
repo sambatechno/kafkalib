@@ -40,7 +40,8 @@ func main() {
 		dialer,
 	)
 
-	evt := kevt.NewUserEvent("uuid-uuid")
+	evt := kevt.NewUserEvent()
+	evt.UserUuid = "user-uuid"
 	evt.Body = &msg.UserEvent_RegistrationSuccess_{
 		RegistrationSuccess: &msg.UserEvent_RegistrationSuccess{
 			Email: "test@test.com",
